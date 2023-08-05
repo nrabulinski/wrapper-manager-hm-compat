@@ -7,6 +7,9 @@
   ...
 }: let
   extendedLib = import "${home-manager}/modules/lib/stdlib-extended.nix" lib;
+  libModule = {
+    config.lib = extendedLib.hm;
+  };
   compatibleModules = [
     # Modules confirmed to work
     "programs/helix.nix"
@@ -21,7 +24,6 @@
     "programs/autojump.nix"
     "programs/man.nix"
     "misc/xdg.nix"
-    "misc/lib.nix"
     "misc/version.nix"
   ];
   hmModules = map (p: "${home-manager}/modules/${p}") compatibleModules;
@@ -34,11 +36,10 @@ in {
 
   imports =
     [
-      {
-        config.lib = extendedLib.hm;
-      }
       ./modules/programs/helix.nix
       ./modules/misc/xdg.nix
+      ./modules/misc/lib.nix
+      libModule
 
       "${nixpkgs}/nixos/modules/misc/assertions.nix"
       "${nixpkgs}/nixos/modules/misc/meta.nix"
