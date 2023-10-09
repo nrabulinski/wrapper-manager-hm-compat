@@ -23,7 +23,10 @@ in {
           root = "helix";
         };
       in {
-        XDG_CONFIG_HOME = configDir;
+        XDG_CONFIG_HOME = {
+          value = configDir;
+          force = true;
+        };
       };
     };
   };
