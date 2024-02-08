@@ -62,5 +62,18 @@
             files
           )}
       '';
+    xdgConfigDir = { name, createDir ? false }: let
+      inherit (config.xdg) configHome;
+      prefix = "${configHome}/${name}/";
+      files =
+        lib.filterAttrs
+        (_: file: lib.hasPrefix prefix file.target && file.enable)
+        config.home.file;
+    in
+      collectFiles {
+        name = "${name}-config";
+        inherit files prefix;
+        root = lib.optionalString createDir name;
+      };
   };
 }
