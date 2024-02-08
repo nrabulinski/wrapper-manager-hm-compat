@@ -20,6 +20,7 @@
     # Modules confirmed to work
     "programs/helix.nix"
     "programs/starship.nix"
+    "programs/kitty.nix"
 
     # TODO: For now only required to be present, hopefully will be compatible later
     "programs/bash.nix"
@@ -92,6 +93,7 @@ in {
     [
       ./modules/programs/helix.nix
       ./modules/programs/starship.nix
+      ./modules/programs/kitty.nix
       ./modules/misc/xdg.nix
       ./modules/misc/lib.nix
       libModule
