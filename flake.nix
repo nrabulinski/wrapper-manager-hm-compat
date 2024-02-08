@@ -2,15 +2,40 @@
   inputs = {
     home-manager.url = "github:nix-community/home-manager";
     nixpkgs.follows = "home-manager/nixpkgs";
+    wrapper-manager.url = "github:viperML/wrapper-manager";
+    wrapper-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
     nixpkgs,
     home-manager,
+    wrapper-manager,
     ...
-  }: {
+  }: let
+    homeManagerCompat = import ./. {inherit nixpkgs home-manager;};
+    eval = {
+      pkgs,
+      modules ? [],
+      specialArgs ? {},
+    }:
+      wrapper-manager.lib {
+        inherit pkgs;
+        modules = modules ++ [homeManagerCompat];
+        specialArgs =
+          specialArgs
+          // {
+            lib = import "${home-manager}/modules/lib/stdlib-extended.nix" pkgs.lib;
+          };
+      };
+  in {
+    lib = {
+      inherit eval;
+      __functor = _: eval;
+      build = args: (eval args).config.build.toplevel;
+    };
+
     wrapperManagerModules = rec {
-      homeManagerCompat = import ./. {inherit nixpkgs home-manager;};
+      inherit homeManagerCompat;
       default = homeManagerCompat;
     };
 

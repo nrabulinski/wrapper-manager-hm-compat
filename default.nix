@@ -2,13 +2,19 @@
   nixpkgs,
   home-manager,
 }: {
+  config,
   pkgs,
   lib,
   ...
 }: let
-  extendedLib = import "${home-manager}/modules/lib/stdlib-extended.nix" lib;
+  optionsPatch = {
+    options.build = with lib; {
+      toplevel = mkOption {readOnly = false;};
+      packages = mkOption {readOnly = false;};
+    };
+  };
   libModule = {
-    config.lib = extendedLib.hm;
+    config.lib = lib.hm or {};
   };
   compatibleModules = [
     # Modules confirmed to work
@@ -38,6 +44,44 @@
 in {
   _file = ./default.nix;
 
+  # Copied from https://github.com/viperML/wrapper-manager/blob/master/modules/build.nix
+  # and added showing assertions and warnings.
+  build = let
+    failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
+    build = {
+      toplevel = pkgs.buildEnv {
+        name = "wrapper-manager";
+        paths = builtins.attrValues config.build.packages;
+      };
+
+      packages = builtins.mapAttrs (_: value: value.wrapped) config.wrappers;
+    };
+    buildWarn =
+      if failedAssertions != []
+      then throw "\nFailed assertions:\n${lib.concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+      else lib.showWarnings config.warnings build;
+  in
+    lib.mkForce buildWarn;
+
+  warnings = lib.optional (!lib ? hm) ''
+    The `lib` argument is not extended with home-manager methods,
+    meaning you're probably using the legacy method by importing
+    wrapper-manager-hm-compat.wrapperManagerModules.homeManagerCompat.
+    This breaks some home-manager modules, so instead use
+    ```
+    wrapper-manager-hm-compat.lib {
+      modules = [ ... ];
+    }
+    ```
+    or
+    ```
+    wrapper-manager-hm-compat.lib.build {
+      modules = [ ... ];
+    }
+    ```
+    (the same api wrapper-manager exposes)
+  '';
+
   home.stateVersion = lib.mkDefault "23.11";
   home.homeDirectory = "/home-manager-compat-home";
   home.username = "wrapper-manager-user";
@@ -51,6 +95,7 @@ in {
       ./modules/misc/xdg.nix
       ./modules/misc/lib.nix
       libModule
+      optionsPatch
 
       "${nixpkgs}/nixos/modules/misc/assertions.nix"
       "${nixpkgs}/nixos/modules/misc/meta.nix"
