@@ -26,7 +26,7 @@ in {
       )
       ++ [
         {
-          assertion = config.home.xdg.enable;
+          assertion = config.xdg.enable;
           message = ''
             Looks like you disabled xdg module.
             This will make it impossible for the hm-compat module to find config files for specific programs etc.
