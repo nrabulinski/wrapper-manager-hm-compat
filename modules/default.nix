@@ -30,12 +30,14 @@
     "programs/nushell.nix"
     "programs/autojump.nix"
     "programs/man.nix"
+    "programs/git.nix"
     "misc/fontconfig.nix"
 
     # Modules required for other HM modules
     "files.nix"
     "home-environment.nix"
     "systemd.nix"
+    "launchd"
     "misc/xdg.nix"
     "misc/version.nix"
     "misc/submodule-support.nix"
