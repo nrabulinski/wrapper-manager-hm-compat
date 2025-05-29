@@ -12,7 +12,7 @@
     wrapper-manager,
     ...
   }: let
-    homeManagerCompat = import ./. {inherit nixpkgs home-manager;};
+    homeManagerCompat = import ./modules {inherit nixpkgs home-manager;};
     eval = {
       pkgs,
       modules ? [],

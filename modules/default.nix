@@ -91,11 +91,11 @@ in {
 
   imports =
     [
-      ./modules/programs/helix.nix
-      ./modules/programs/starship.nix
-      ./modules/programs/kitty.nix
-      ./modules/misc/xdg.nix
-      ./modules/misc/lib.nix
+      ./programs/helix.nix
+      ./programs/starship.nix
+      ./programs/kitty.nix
+      ./misc/xdg.nix
+      ./misc/lib.nix
       libModule
       optionsPatch
 
