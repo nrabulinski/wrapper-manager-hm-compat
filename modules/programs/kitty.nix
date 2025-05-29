@@ -9,7 +9,7 @@ in {
     wrappers.kitty = {
       basePackage = cfg.package;
       env = {
-        KITTY_CONFIG_DIRECTORY.value = config.lib.hm-compat.xdgConfigDir { name = "kitty"; };
+        KITTY_CONFIG_DIRECTORY.value = config.lib.hm-compat.xdgConfigDir {name = "kitty";};
       };
     };
   };

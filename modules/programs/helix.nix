@@ -12,7 +12,10 @@ in {
       # which home-manager allows us to populate.
       env = {
         XDG_CONFIG_HOME = {
-          value = config.lib.hm-compat.xdgConfigDir {name = "helix"; createDir = true;};
+          value = config.lib.hm-compat.xdgConfigDir {
+            name = "helix";
+            createDir = true;
+          };
           force = true;
         };
       };

@@ -62,7 +62,10 @@
             files
           )}
       '';
-    xdgConfigDir = { name, createDir ? false }: let
+    xdgConfigDir = {
+      name,
+      createDir ? false,
+    }: let
       inherit (config.xdg) configHome;
       prefix = "${configHome}/${name}/";
       files =

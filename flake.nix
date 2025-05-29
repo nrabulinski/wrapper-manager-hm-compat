@@ -12,21 +12,10 @@
     wrapper-manager,
     ...
   }: let
-    homeManagerCompat = import ./modules {inherit nixpkgs home-manager;};
-    eval = {
-      pkgs,
-      modules ? [],
-      specialArgs ? {},
-    }:
-      wrapper-manager.lib {
-        inherit pkgs;
-        modules = modules ++ [homeManagerCompat];
-        specialArgs =
-          specialArgs
-          // {
-            lib = import "${home-manager}/modules/lib/stdlib-extended.nix" pkgs.lib;
-          };
-      };
+    eval = import ./. {
+      inherit nixpkgs home-manager;
+      wrapper-manager = wrapper-manager.lib;
+    };
   in {
     lib = {
       inherit eval;
@@ -35,7 +24,7 @@
     };
 
     wrapperManagerModules = rec {
-      inherit homeManagerCompat;
+      homeManagerCompat = import ./modules {inherit nixpkgs home-manager;};
       default = homeManagerCompat;
     };
 
