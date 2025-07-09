@@ -24,7 +24,7 @@
 
     # TODO: For now only required to be present, hopefully will be compatible later
     "programs/bash.nix"
-    "programs/zsh.nix"
+    "programs/zsh"
     "programs/fish.nix"
     "programs/ion.nix"
     "programs/nushell.nix"
@@ -47,13 +47,13 @@
 in {
   _file = ./default.nix;
 
-  # Copied from https://github.com/viperML/wrapper-manager/blob/master/modules/build.nix
+  # Copied from https://github.com/viperML/wrapper-manager/blob/master/modules/many-wrappers.nix
   # and added showing assertions and warnings.
   build = let
     failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
     build = {
       toplevel = pkgs.buildEnv {
-        name = "wrapper-manager";
+        name = "wrapper-manager-bundle";
         paths = builtins.attrValues config.build.packages;
       };
 

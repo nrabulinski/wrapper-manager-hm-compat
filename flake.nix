@@ -3,7 +3,6 @@
     home-manager.url = "github:nix-community/home-manager";
     nixpkgs.follows = "home-manager/nixpkgs";
     wrapper-manager.url = "github:viperML/wrapper-manager";
-    wrapper-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
