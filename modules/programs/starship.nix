@@ -10,7 +10,7 @@ in {
       basePackage = cfg.package;
       env = lib.mkIf (cfg.settings != {}) {
         STARSHIP_CONFIG.value =
-          config.lib.hm-compat.sourceStorePath config.xdg.configFile."starship.toml";
+          config.lib.hm-compat.sourceStorePath config.home.file.${cfg.configPath};
       };
     };
   };
