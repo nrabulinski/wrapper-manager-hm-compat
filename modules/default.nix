@@ -29,7 +29,7 @@
     "programs/ion.nix"
     "programs/nushell.nix"
     "programs/autojump.nix"
-    "programs/man.nix"
+    "programs/man/default.nix"
     "programs/git.nix"
     "misc/fontconfig.nix"
 
